@@ -1,9 +1,9 @@
-import axios from "axios";
+// import axios from "axios";
 
-export default axios.create({
-    baseURL: "https://laravelreactapi-new.000webhostapp.com",
-    headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-    },
-    withCredentials: true,
-})
+// export default axios.create({
+//     baseURL: "http:localhost:8000",
+//     headers: {
+//         'X-Requested-With': 'XMLHttpRequest',
+//     },
+//     withCredentials: true,
+// });
