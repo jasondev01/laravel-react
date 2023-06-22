@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-// import axios from '../api/axios'
+import axios from '../api/axios'
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext({});
@@ -8,46 +8,25 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
-    const csrf = () => fetch('https://laravelreactapi-new.000webhostapp.com/sanctum/csrf-cookie');
+    const csrf = () => axios.get('/sanctum/csrf-cookie')
 
     const getUser = async () => {
-        try {
-            const response = await fetch('https://laravelreactapi-new.000webhostapp.com/api/user');
-            if (response.ok) {
-                const data = await response.json();
-                setUser(data);
-            } else {
-                throw new Error('Failed to get user');
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        const { data } = await axios.get('/api/user');
+        setUser(data);
     }
 
     const login = async ({ ...data }) => { // email, password
         await csrf();
         setErrors([]);
         try {
-            const response = await fetch('https://laravelreactapi-new.000webhostapp.com/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-                credentials: 'include',
-            });
-
-            if (response.ok) {
-                await getUser();
-                navigate('/');
-            } else if (response.status === 422) {
-                const errorData = await response.json();
-                setErrors(errorData.errors);
-            } else {
-                throw new Error('Failed to login');
+            await axios.post('/login', data);
+            await getUser();
+            navigate('/')
+        } catch(e) {
+            console.log(e);
+            if (e.response.status === 422) {
+                setErrors(e.response.data.errors);
             }
-        } catch (error) {
-            console.log(error);
         }
     }
 
@@ -55,40 +34,22 @@ export const AuthProvider = ({ children }) => {
         await csrf();
         setErrors([]);
         try {
-            const response = await fetch('https://laravelreactapi-new.000webhostapp.com/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-                credentials: 'include',
-            });
-
-            if (response.ok) {
-                await getUser();
-                navigate('/');
-            } else if (response.status === 422) {
-                const errorData = await response.json();
-                setErrors(errorData.errors);
-            } else {
-                throw new Error('Failed to register');
+            await axios.post('/register', data);
+            await getUser();
+            navigate('/')
+        } catch(e) {
+            console.log(e);
+            if (e.response.status === 422) {
+                setErrors(e.response.data.errors)
             }
-        } catch (error) {
-            console.log(error);
         }
     }
 
     const logout = () => {
-        fetch('https://laravelreactapi-new.000webhostapp.com/logout', {
-            method: 'POST',
-            credentials: 'include',
-        })
-            .then(() => {
-                setUser(null);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        axios.post('/logout')
+        .then(() => {
+            setUser(null);
+        }) 
     }
 
     useEffect(() => {

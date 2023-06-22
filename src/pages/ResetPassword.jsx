@@ -24,6 +24,34 @@ const ResetPassword = () => {
         await csrf();
         setErrors([]);
         setStatus(null);
+        // try {
+        //     const response = await fetch('http://localhost:8000/password-reset', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({
+        //             email,
+        //             token,
+        //             password,
+        //             password_confirmation,
+        //         }),
+        //         credentials: 'include',
+        //     });
+
+        //     if (response) {
+        //         const responseData = await response.json();
+        //         setStatus(responseData.status);
+        //     } else if (response.status === 422) {
+        //         const errorData = await response.json();
+        //         setErrors(errorData.errors);
+        //     } else {
+        //         throw new Error('Failed to submit');
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        // }
+
         try {
             const response = await axios.post("/password-reset", { email, token, password, password_confirmation});
             setStatus(response.data.status);

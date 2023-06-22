@@ -13,6 +13,29 @@ const ForgotPassword = () => {
         await csrf();
         setErrors([]);
         setStatus(null);
+        // try {
+        //     const response = await fetch('http://localhost:8000/forgot-password', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({ email }),
+        //         credentials: 'include',
+        //     });
+
+        //     if (response) {
+        //         const responseData = await response.json();
+        //         setStatus(responseData.status);
+        //     } else if (response.status === 422) {
+        //         const errorData = await response.json();
+        //         setErrors(errorData.errors);
+        //     } else {
+        //         throw new Error('Failed to submit');
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        // }
+
         try {
             const response = await axios.post("/forgot-password", { email });
             setStatus(response.data.status);
