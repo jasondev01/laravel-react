@@ -8,11 +8,11 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
-    const csrf = () => fetch('/sanctum/csrf-cookie');
+    const csrf = () => fetch('https://laravelreactapi-new.000webhostapp.com/sanctum/csrf-cookie');
 
     const getUser = async () => {
         try {
-            const response = await fetch('/api/user');
+            const response = await fetch('https://laravelreactapi-new.000webhostapp.com/api/user');
             if (response.ok) {
                 const data = await response.json();
                 setUser(data);
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         await csrf();
         setErrors([]);
         try {
-            const response = await fetch('/login', {
+            const response = await fetch('https://laravelreactapi-new.000webhostapp.com/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         await csrf();
         setErrors([]);
         try {
-            const response = await fetch('/register', {
+            const response = await fetch('https://laravelreactapi-new.000webhostapp.com/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const logout = () => {
-        fetch('/logout', {
+        fetch('https://laravelreactapi-new.000webhostapp.com/logout', {
             method: 'POST',
             credentials: 'include',
         })
